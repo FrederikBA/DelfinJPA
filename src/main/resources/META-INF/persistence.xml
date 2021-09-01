@@ -4,6 +4,7 @@
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>entities.Person</class>
     <class>entities.Address</class>
+    <class>entities.Fee</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/startcode?serverTimezone=UTC"/>
       <property name="javax.persistence.jdbc.user" value="dev"/>
