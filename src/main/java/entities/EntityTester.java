@@ -25,7 +25,14 @@ public class EntityTester {
         p1.addFee(f1);
         p1.addFee(f3);
         p2.addFee(f2);
-        
+
+        SwimStyle s1 = new SwimStyle("Crawl");
+        SwimStyle s2 = new SwimStyle("Butterfly");
+        SwimStyle s3 = new SwimStyle("Breast Stroke");
+
+        p1.addSwimStyle(s1);
+        p1.addSwimStyle(s3);
+        p2.addSwimStyle(s2);
 
         p1.setAddress(a1);
         p2.setAddress(a2);
@@ -35,20 +42,24 @@ public class EntityTester {
         em.persist(p2);
         em.getTransaction().commit();
 
+        em.getTransaction().begin();
+        p1.removeSwimStyle(s3);
+        em.getTransaction().commit();
+
         System.out.println("p1: " + p1.getName() + " " + p1.getId());
         System.out.println("p2: " + p2.getName() + " " + p2.getId());
 
         System.out.println("Jonkes gade: " + p1.getAddress().getStreet());
         System.out.println("Hvem bor på Store Torv 1: " + a1.getPerson().getName());
-        
+
         System.out.println("Hvem har betalt f2? Det har: " + f2.getPerson().getName());
-        
+
         System.out.println("Betalinger:");
-        
-        TypedQuery<Fee> query = em.createQuery("SELECT f FROM Fee f",Fee.class);
-        
+
+        TypedQuery<Fee> query = em.createQuery("SELECT f FROM Fee f", Fee.class);
+
         List<Fee> fees = query.getResultList();
-        
+
         for (Fee f : fees) {
             System.out.println(f.getPerson().getName() + " " + f.getAmount() + " " + f.getPayDate());
         }

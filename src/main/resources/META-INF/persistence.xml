@@ -5,6 +5,7 @@
     <class>entities.Person</class>
     <class>entities.Address</class>
     <class>entities.Fee</class>
+    <class>entities.SwimStyle</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/startcode?serverTimezone=UTC"/>
       <property name="javax.persistence.jdbc.user" value="dev"/>
