@@ -100,4 +100,12 @@ public class Person implements Serializable {
         }
     }
 
+    public List<SwimStyle> getStyles() {
+        return styles;
+    }
+
+    public void setStyles(List<SwimStyle> styles) {
+        this.styles = styles;
+    }
+
 }

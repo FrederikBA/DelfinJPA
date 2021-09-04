@@ -1,5 +1,6 @@
 package entities;
 
+import dto.PersonFeeDTO;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -14,6 +15,7 @@ public class EntityTester {
 
         Person p1 = new Person("Jonke", 1963);
         Person p2 = new Person("Blondie", 1959);
+        Person p3 = new Person("Janus", 1996);
 
         Address a1 = new Address("Store Torv 1", 2323, "Nr Snede");
         Address a2 = new Address("Langgade 34", 1212, "Valby");
@@ -33,6 +35,7 @@ public class EntityTester {
         p1.addSwimStyle(s1);
         p1.addSwimStyle(s3);
         p2.addSwimStyle(s2);
+        p3.addSwimStyle(s1);
 
         p1.setAddress(a1);
         p2.setAddress(a2);
@@ -40,6 +43,7 @@ public class EntityTester {
         em.getTransaction().begin();
         em.persist(p1);
         em.persist(p2);
+        em.persist(p3);
         em.getTransaction().commit();
 
         em.getTransaction().begin();
@@ -56,13 +60,42 @@ public class EntityTester {
 
         System.out.println("Betalinger:");
 
-        TypedQuery<Fee> query = em.createQuery("SELECT f FROM Fee f", Fee.class);
+        TypedQuery<Fee> query1 = em.createQuery("SELECT f FROM Fee f", Fee.class);
 
-        List<Fee> fees = query.getResultList();
+        List<Fee> fees = query1.getResultList();
 
         for (Fee f : fees) {
             System.out.println(f.getPerson().getName() + " " + f.getAmount() + " " + f.getPayDate());
         }
-    }
+        TypedQuery<PersonFeeDTO> query2 = em.createQuery("SELECT new dto.PersonFeeDTO(p.name, f.amount) FROM Person p JOIN p.fees f", PersonFeeDTO.class);
 
+        List<PersonFeeDTO> personsAndFees = query2.getResultList();
+
+        for (PersonFeeDTO p : personsAndFees) {
+            System.out.println(p.getName() + "," + p.getFee());
+        }
+
+        TypedQuery<Person> query3 = em.createQuery("SELECT person FROM Person person JOIN person.styles s WHERE s.styleName = 'Crawl'", Person.class);
+
+        List<Person> crawlPersons = query3.getResultList();
+
+        for (Person p : crawlPersons) {
+            System.out.println(p.getName());
+        }
+        TypedQuery<Long> query4 = em.createQuery("SELECT SUM(fee.amount) FROM Fee fee", Long.class);
+
+        Long feeSum = query4.getSingleResult();
+
+        System.out.println(feeSum);
+
+        TypedQuery<Integer> query5 = em.createQuery("SELECT MIN(fee.amount) FROM Fee fee", Integer.class);
+
+        TypedQuery<Integer> query6 = em.createQuery("SELECT MAX(fee.amount) FROM Fee fee", Integer.class);
+
+        Integer smallestFee = query5.getSingleResult();
+
+        Integer highestFee = query6.getSingleResult();
+
+        System.out.println("The smallest fee is: " + smallestFee + " and the highest fee is: " + highestFee);
+    }
 }
